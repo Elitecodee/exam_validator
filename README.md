@@ -1,51 +1,47 @@
 # Exam Validator
 
-This repository now contains a **Laravel-ready Phase 1 starter** focused on:
-- Project setup steps
-- Role-based authentication
-- Initial page flow for Admin and Lecturer
+This repository contains a Laravel-oriented starter for building an exam validator system with role-based access and blueprint-driven rules.
 
-## What is included now
+## Current implemented scope
 
-### 1) Setup and auth flow (implemented as starter code)
-- `routes/web.php` with:
-  - Login / Register / Logout routes
-  - Admin-protected dashboard route
-  - Lecturer-protected dashboard + exam routes
-- `app/Http/Controllers/Auth/AuthController.php`:
-  - Login, register, and logout handlers
-  - Role-based post-login redirect
-- `app/Http/Middleware/EnsureUserHasRole.php`:
-  - Generic role gate middleware
+### Phase 1 (completed)
+- Authentication flow (login/register/logout)
+- Role-based route protection for Admin and Lecturer
+- Starter dashboard pages and lecturer exam flow placeholders
 
-### 2) Pages written out (Blade templates)
-- Authentication pages:
-  - `resources/views/auth/login.blade.php`
-  - `resources/views/auth/register.blade.php`
-- Admin pages:
-  - `resources/views/admin/dashboard.blade.php`
-- Lecturer pages:
-  - `resources/views/lecturer/dashboard.blade.php`
-  - `resources/views/lecturer/exams-index.blade.php`
-  - `resources/views/lecturer/exams-create.blade.php`
-  - `resources/views/lecturer/exams-show.blade.php`
-- Shared layout:
-  - `resources/views/layouts/app.blade.php`
+### Phase 2 (started): Admin Blueprint Settings
+Admin blueprint management is now scaffolded with CRUD + activation toggle.
 
-### 3) Data bootstrap for roles
-- `database/migrations/2026_01_01_000001_add_role_to_users_table.php`
-- `database/seeders/RoleAndAdminSeeder.php`
+Admin can:
+- Create blueprint
+- Define total marks
+- Define theory/problem-solving percentages
+- Define topic percentages with min/max limits
+- Define difficulty percentages with min/max limits
+- Edit/delete/activate/deactivate blueprint
 
-## How to apply in a fresh Laravel app
+System validates blueprint integrity on save:
+- Theory + problem-solving = 100%
+- Topic expected totals = 100%
+- Difficulty expected totals = 100%
+- Expected values must be within min/max limits
 
-1. Scaffold Laravel in a network-enabled environment.
-2. Copy these starter files into the Laravel project.
-3. Register middleware alias `role` in bootstrap/app config.
-4. Run migrations and seeders.
-5. Start server and test login by role.
+## Main files
+- Routes: `routes/web.php`
+- Admin blueprint controller: `app/Http/Controllers/Admin/BlueprintController.php`
+- Models: `app/Models/Blueprint.php`, `app/Models/BlueprintRule.php`
+- Blueprint pages:
+  - `resources/views/admin/blueprints/index.blade.php`
+  - `resources/views/admin/blueprints/create.blade.php`
+  - `resources/views/admin/blueprints/edit.blade.php`
+  - `resources/views/admin/blueprints/_form.blade.php`
+- Migrations:
+  - `database/migrations/2026_01_01_000002_create_blueprints_table.php`
+  - `database/migrations/2026_01_01_000003_create_blueprint_rules_table.php`
+- Docs: `docs/admin-blueprint-management.md`
 
-## Next implementation step
-After this phase, we implement:
-- Blueprint CRUD (Admin)
-- Exam question entry + real-time validation (Lecturer)
-- Final compliance check and reports
+## Next steps
+- Connect blueprint forms to real course records
+- Add blueprint detail view and chart summary
+- Build lecturer-side real-time compliance computation against blueprint rules
+- Add final submit compliance report with pass/fail and correction guidance
