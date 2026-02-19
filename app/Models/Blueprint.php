@@ -29,4 +29,9 @@ class Blueprint extends Model
     {
         return $this->hasMany(BlueprintRule::class);
     }
+
+    public function exams(): HasMany
+    {
+        return $this->hasMany(Exam::class);
+    }
 }

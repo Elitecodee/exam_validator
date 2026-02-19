@@ -42,4 +42,6 @@ Route::middleware(['auth', 'role:lecturer'])->prefix('lecturer')->name('lecturer
     Route::get('/exams/create', [ExamController::class, 'create'])->name('exams.create');
     Route::post('/exams', [ExamController::class, 'store'])->name('exams.store');
     Route::get('/exams/{exam}', [ExamController::class, 'show'])->name('exams.show');
+    Route::post('/exams/{exam}/questions', [ExamController::class, 'addQuestion'])->name('exams.questions.store');
+    Route::post('/exams/{exam}/submit', [ExamController::class, 'submit'])->name('exams.submit');
 });

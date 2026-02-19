@@ -1,47 +1,65 @@
 # Exam Validator
 
-This repository contains a Laravel-oriented starter for building an exam validator system with role-based access and blueprint-driven rules.
+Laravel-oriented implementation starter for validating exams against blueprint rules.
 
-## Current implemented scope
+## Progress
 
-### Phase 1 (completed)
-- Authentication flow (login/register/logout)
-- Role-based route protection for Admin and Lecturer
-- Starter dashboard pages and lecturer exam flow placeholders
+### Phase 1
+- Role-based authentication flow (Admin, Lecturer)
+- Protected dashboard routing
 
-### Phase 2 (started): Admin Blueprint Settings
-Admin blueprint management is now scaffolded with CRUD + activation toggle.
+### Phase 2A
+- Admin blueprint management
+- Blueprint CRUD + activate/deactivate
+- Blueprint self-validation (sum/range checks)
 
-Admin can:
-- Create blueprint
-- Define total marks
-- Define theory/problem-solving percentages
-- Define topic percentages with min/max limits
-- Define difficulty percentages with min/max limits
-- Edit/delete/activate/deactivate blueprint
+### Phase 2B (implemented now)
+- Lecturer exam creation
+- Question entry per exam
+- Real-time validation report against blueprint
+- Final compliance check on submit (Pass/Fail + failed rule + suggestion)
 
-System validates blueprint integrity on save:
-- Theory + problem-solving = 100%
-- Topic expected totals = 100%
-- Difficulty expected totals = 100%
-- Expected values must be within min/max limits
+## Implemented feature map
 
-## Main files
-- Routes: `routes/web.php`
-- Admin blueprint controller: `app/Http/Controllers/Admin/BlueprintController.php`
-- Models: `app/Models/Blueprint.php`, `app/Models/BlueprintRule.php`
-- Blueprint pages:
-  - `resources/views/admin/blueprints/index.blade.php`
-  - `resources/views/admin/blueprints/create.blade.php`
-  - `resources/views/admin/blueprints/edit.blade.php`
-  - `resources/views/admin/blueprints/_form.blade.php`
-- Migrations:
-  - `database/migrations/2026_01_01_000002_create_blueprints_table.php`
-  - `database/migrations/2026_01_01_000003_create_blueprint_rules_table.php`
-- Docs: `docs/admin-blueprint-management.md`
+### Admin
+- Blueprint settings:
+  - create/edit/delete/toggle
+  - configure total marks, type split, topic rules, difficulty rules, min/max limits
 
-## Next steps
-- Connect blueprint forms to real course records
-- Add blueprint detail view and chart summary
-- Build lecturer-side real-time compliance computation against blueprint rules
-- Add final submit compliance report with pass/fail and correction guidance
+### Lecturer
+- Create exam with selected blueprint
+- Add questions with:
+  - question text
+  - type (theory/problem solving)
+  - topic
+  - difficulty
+  - marks
+- View live validation metrics:
+  - expected vs current vs deviation
+- Submit exam for final compliance check
+
+## Core logic
+
+Validation computes percentages by marks:
+- `percentage = category_marks / total_exam_marks * 100`
+
+Then compares to blueprint limits:
+- out of min/max => violation
+- on submit, any violation => fail
+
+## Important files
+
+- `app/Http/Controllers/Admin/BlueprintController.php`
+- `app/Http/Controllers/Lecturer/ExamController.php`
+- `app/Services/ExamValidationService.php`
+- `app/Models/Blueprint.php`
+- `app/Models/BlueprintRule.php`
+- `app/Models/Exam.php`
+- `app/Models/Question.php`
+- `resources/views/admin/blueprints/*`
+- `resources/views/lecturer/exams/*`
+- `routes/web.php`
+
+## Documentation
+- `docs/admin-blueprint-management.md`
+- `docs/phase-2-exam-creation-validation.md`
