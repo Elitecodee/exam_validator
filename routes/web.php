@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\BlueprintController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Lecturer\ExamController;
 use App\Http\Controllers\Lecturer\LecturerDashboardController;
@@ -24,6 +25,14 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/blueprints', [BlueprintController::class, 'index'])->name('blueprints.index');
+    Route::get('/blueprints/create', [BlueprintController::class, 'create'])->name('blueprints.create');
+    Route::post('/blueprints', [BlueprintController::class, 'store'])->name('blueprints.store');
+    Route::get('/blueprints/{blueprint}/edit', [BlueprintController::class, 'edit'])->name('blueprints.edit');
+    Route::put('/blueprints/{blueprint}', [BlueprintController::class, 'update'])->name('blueprints.update');
+    Route::patch('/blueprints/{blueprint}/toggle', [BlueprintController::class, 'toggle'])->name('blueprints.toggle');
+    Route::delete('/blueprints/{blueprint}', [BlueprintController::class, 'destroy'])->name('blueprints.destroy');
 });
 
 Route::middleware(['auth', 'role:lecturer'])->prefix('lecturer')->name('lecturer.')->group(function () {
