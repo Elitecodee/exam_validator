@@ -68,3 +68,4 @@ Matching is normalized (trim + lowercase) so rule keys and question values compa
 ## Documentation
 - `docs/admin-blueprint-management.md`
 - `docs/phase-2-exam-creation-validation.md`
+- `docs/admin-analytics-reporting.md`

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\BlueprintController;
 use App\Http\Controllers\Auth\AuthController;
@@ -25,6 +26,8 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/reports/compliance.csv', [AdminAnalyticsController::class, 'downloadComplianceCsv'])->name('reports.compliance.csv');
 
     Route::get('/blueprints', [BlueprintController::class, 'index'])->name('blueprints.index');
     Route::get('/blueprints/create', [BlueprintController::class, 'create'])->name('blueprints.create');
