@@ -68,3 +68,8 @@ If no violations:
 - `database/migrations/2026_01_01_000004_create_exams_table.php`
 - `database/migrations/2026_01_01_000005_create_questions_table.php`
 - `database/migrations/2026_01_01_000006_create_validation_histories_table.php`
+
+
+## Cleanup
+
+Legacy flat lecturer exam blade files were removed to avoid duplicate templates and maintenance confusion. Canonical templates are now only under `resources/views/lecturer/exams/`.
