@@ -1,25 +1,36 @@
 @extends('layouts.app', ['title' => 'Login'])
 
 @section('content')
-<div class="card" style="max-width: 520px; margin: 40px auto;">
-    <h2>Login</h2>
-    <p class="muted">Sign in as Admin/Department Officer or Lecturer.</p>
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body p-4 p-md-5">
+                <h1 class="uni-page-title h3">University Exam Portal Login</h1>
+                <p class="uni-subtitle">Sign in as Department Officer or Lecturer.</p>
 
-    <form method="POST" action="{{ route('login.attempt') }}">
-        @csrf
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" value="{{ old('email') }}" required>
+                <form method="POST" action="{{ route('login.attempt') }}">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" name="email" type="email" value="{{ old('email') }}" class="form-control" required>
+                    </div>
 
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" required>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input id="password" name="password" type="password" class="form-control" required>
+                    </div>
 
-        <label>
-            <input name="remember" type="checkbox" value="1" style="width: auto;"> Remember me
-        </label>
+                    <div class="form-check mb-3">
+                        <input id="remember" name="remember" type="checkbox" value="1" class="form-check-input">
+                        <label for="remember" class="form-check-label">Remember me</label>
+                    </div>
 
-        <button type="submit">Login</button>
-    </form>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
 
-    <p class="muted">No account? <a href="{{ route('register.form') }}">Register as Lecturer</a></p>
+                <p class="text-secondary small mt-3 mb-0">No account? <a href="{{ route('register.form') }}">Register as Lecturer</a></p>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

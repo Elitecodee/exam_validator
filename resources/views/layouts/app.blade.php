@@ -4,40 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Exam Validator' }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; background: #f5f7fb; color: #1f2937; }
-        .nav { background: #111827; color: #fff; padding: 12px 20px; display: flex; justify-content: space-between; }
-        .container { max-width: 980px; margin: 24px auto; padding: 0 16px; }
-        .card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.08); margin-bottom: 16px; }
-        .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-        label { display: block; font-weight: 600; margin-bottom: 6px; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; margin-bottom: 14px; }
-        button { background: #2563eb; color: white; border: 0; border-radius: 8px; padding: 10px 14px; cursor: pointer; }
-        a { color: #2563eb; text-decoration: none; }
-        .muted { color: #6b7280; }
-        .alert { background: #ecfeff; border: 1px solid #a5f3fc; padding: 10px; border-radius: 8px; margin-bottom: 12px; }
+        :root {
+            --uni-primary: #0f3d7a;
+            --uni-accent: #1f6fd1;
+            --uni-bg: #f4f8fc;
+            --uni-surface: #ffffff;
+            --uni-muted: #6b7280;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fbff 0%, var(--uni-bg) 100%);
+            color: #1f2937;
+        }
+
+        .uni-navbar {
+            background: var(--uni-surface);
+            border-bottom: 1px solid #d9e4f4;
+            box-shadow: 0 8px 24px rgba(15, 61, 122, 0.05);
+        }
+
+        .uni-brand-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--uni-accent);
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .page-shell {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .uni-page-title {
+            color: var(--uni-primary);
+            font-weight: 700;
+            letter-spacing: .3px;
+        }
+
+        .uni-subtitle {
+            color: var(--uni-muted);
+            margin-bottom: 1rem;
+        }
+
+        .card {
+            border: 1px solid #e1e9f5;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(15, 61, 122, 0.04);
+        }
+
+        .table thead th {
+            background: #f2f7ff;
+            color: #0f3d7a;
+            border-bottom: 1px solid #d7e4f8;
+            font-weight: 600;
+        }
+
+        .uni-kpi {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--uni-primary);
+        }
     </style>
 </head>
 <body>
-    <div class="nav">
-        <strong>Exam Validator</strong>
-        <div>
-            @auth
-                <span style="margin-right: 10px;">{{ auth()->user()->name }}</span>
-                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+<nav class="navbar navbar-expand-lg uni-navbar">
+    <div class="container-fluid page-shell my-0 py-0">
+        <a class="navbar-brand fw-semibold text-primary" href="#">
+            <span class="uni-brand-dot"></span>Exam Validator
+        </a>
+
+        @auth
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-secondary small">{{ auth()->user()->name }}</span>
+                <form method="POST" action="{{ route('logout') }}" class="m-0">
                     @csrf
-                    <button type="submit">Logout</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm">Logout</button>
                 </form>
-            @endauth
-        </div>
+            </div>
+        @endauth
     </div>
+</nav>
 
-    <main class="container">
-        @if (session('status'))
-            <div class="alert">{{ session('status') }}</div>
-        @endif
+<main class="page-shell">
+    @if (session('status'))
+        <div class="alert alert-info border-0 shadow-sm">{{ session('status') }}</div>
+    @endif
 
-        @yield('content')
-    </main>
+    @yield('content')
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
