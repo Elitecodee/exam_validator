@@ -20,6 +20,12 @@ Laravel-oriented implementation starter for validating exams against blueprint r
 - Final compliance check on submit (Pass/Fail + failed rule + suggestion)
 - Validation history logging snapshots per submit attempt
 
+### Phase 3
+- Reporting module (analytics charts + exports)
+- Chart-data JSON endpoints
+- CSV exports (compliance + detailed distribution)
+- Printable report page for PDF export
+
 ## Implemented feature map
 
 ### Admin
@@ -69,3 +75,4 @@ Matching is normalized (trim + lowercase) so rule keys and question values compa
 - `docs/admin-blueprint-management.md`
 - `docs/phase-2-exam-creation-validation.md`
 - `docs/admin-analytics-reporting.md`
+- `docs/phase-3-reporting-module.md`

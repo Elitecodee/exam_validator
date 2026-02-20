@@ -53,6 +53,8 @@
 <div class="card">
     <a href="{{ route('admin.analytics.index') }}">Open full analytics</a>
     &nbsp;|&nbsp;
+    <a href="{{ route('admin.reports.index') }}">Open reporting module</a>
+    &nbsp;|&nbsp;
     <a href="{{ route('admin.reports.compliance.csv') }}">Download compliance CSV</a>
     &nbsp;|&nbsp;
     <a href="{{ route('admin.blueprints.index') }}">Open Blueprint Settings</a>
