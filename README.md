@@ -26,6 +26,12 @@ Laravel-oriented implementation starter for validating exams against blueprint r
 - CSV exports (compliance + detailed distribution)
 - Printable report page for PDF export
 
+### Phase 4
+- Admin approval/rejection workflow
+- Submitted exam review queue
+- Approve/reject endpoints with review notes
+- Lecturer-visible rejection feedback for resubmission
+
 ## Implemented feature map
 
 ### Admin
@@ -76,3 +82,4 @@ Matching is normalized (trim + lowercase) so rule keys and question values compa
 - `docs/phase-2-exam-creation-validation.md`
 - `docs/admin-analytics-reporting.md`
 - `docs/phase-3-reporting-module.md`
+- `docs/phase-4-admin-approval-workflow.md`

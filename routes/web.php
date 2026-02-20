@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminReportingController;
+use App\Http\Controllers\Admin\AdminExamReviewController;
 use App\Http\Controllers\Admin\BlueprintController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Lecturer\ExamController;
@@ -33,6 +34,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/reports/chart-data', [AdminReportingController::class, 'chartData'])->name('reports.chart-data');
     Route::get('/reports/distribution.csv', [AdminReportingController::class, 'exportTopicBreakdownCsv'])->name('reports.distribution.csv');
     Route::get('/reports/printable', [AdminReportingController::class, 'printable'])->name('reports.printable');
+
+    Route::get('/exams/review', [AdminExamReviewController::class, 'index'])->name('exams.index');
+    Route::get('/exams/{exam}/review', [AdminExamReviewController::class, 'show'])->name('exams.show');
+    Route::patch('/exams/{exam}/approve', [AdminExamReviewController::class, 'approve'])->name('exams.approve');
+    Route::patch('/exams/{exam}/reject', [AdminExamReviewController::class, 'reject'])->name('exams.reject');
 
     Route::get('/blueprints', [BlueprintController::class, 'index'])->name('blueprints.index');
     Route::get('/blueprints/create', [BlueprintController::class, 'create'])->name('blueprints.create');

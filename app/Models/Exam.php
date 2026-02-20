@@ -19,10 +19,14 @@ class Exam extends Model
         'status',
         'validation_score',
         'submitted_at',
+        'reviewed_by',
+        'reviewed_at',
+        'review_note',
     ];
 
     protected $casts = [
         'submitted_at' => 'datetime',
+        'reviewed_at' => 'datetime',
     ];
 
     public function blueprint(): BelongsTo

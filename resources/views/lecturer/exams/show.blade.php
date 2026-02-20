@@ -3,6 +3,11 @@
 @section('content')
 <h1>{{ $exam->title }}</h1>
 <p class="muted">Blueprint: {{ $exam->blueprint?->name ?? 'N/A' }} | Status: {{ strtoupper($exam->status) }}</p>
+@if($exam->status === 'rejected')
+    <div class="card" style="border:1px solid #f59e0b;">
+        <strong>Review note:</strong> {{ $exam->review_note ?: 'Please update questions and resubmit.' }}
+    </div>
+@endif
 
 @if ($errors->has('submit'))
     <div class="card" style="border: 1px solid #ef4444;">

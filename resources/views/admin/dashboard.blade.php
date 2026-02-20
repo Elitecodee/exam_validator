@@ -58,5 +58,7 @@
     <a href="{{ route('admin.reports.compliance.csv') }}">Download compliance CSV</a>
     &nbsp;|&nbsp;
     <a href="{{ route('admin.blueprints.index') }}">Open Blueprint Settings</a>
+    &nbsp;|&nbsp;
+    <a href="{{ route('admin.exams.index') }}">Open exam review queue</a>
 </div>
 @endsection
