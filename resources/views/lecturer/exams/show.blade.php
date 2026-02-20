@@ -13,32 +13,35 @@
 <div class="grid">
     <div class="card">
         <h3>Add Question</h3>
+        @if ($exam->status !== "draft")
+            <p class="muted">This exam is submitted and locked for editing.</p>
+        @endif
         <form method="POST" action="{{ route('lecturer.exams.questions.store', $exam) }}">
             @csrf
 
             <label for="question_text">Question Text</label>
-            <textarea id="question_text" name="question_text" rows="4" required>{{ old('question_text') }}</textarea>
+            <textarea id="question_text" name="question_text" rows="4" required @disabled($exam->status !== "draft")>{{ old('question_text') }}</textarea>
 
             <label for="question_type">Question Type</label>
-            <select id="question_type" name="question_type" required>
+            <select id="question_type" name="question_type" required @disabled($exam->status !== "draft")>
                 <option value="theory">Theory</option>
                 <option value="problem_solving">Problem Solving</option>
             </select>
 
             <label for="topic">Topic</label>
-            <input id="topic" name="topic" type="text" value="{{ old('topic') }}" placeholder="Algebra" required>
+            <input id="topic" name="topic" type="text" value="{{ old('topic') }}" placeholder="Algebra" required @disabled($exam->status !== "draft")>
 
             <label for="difficulty">Difficulty</label>
-            <select id="difficulty" name="difficulty" required>
+            <select id="difficulty" name="difficulty" required @disabled($exam->status !== "draft")>
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
             </select>
 
             <label for="marks">Marks</label>
-            <input id="marks" name="marks" type="number" step="0.5" min="0.5" value="{{ old('marks') }}" required>
+            <input id="marks" name="marks" type="number" step="0.5" min="0.5" value="{{ old('marks') }}" required @disabled($exam->status !== "draft")>
 
-            <button type="submit">Add Question</button>
+            <button type="submit" @disabled($exam->status !== "draft")>Add Question</button>
         </form>
     </div>
 
@@ -74,7 +77,7 @@
 
         <form method="POST" action="{{ route('lecturer.exams.submit', $exam) }}">
             @csrf
-            <button type="submit" style="background: {{ $report['passed'] ? '#059669' : '#dc2626' }};">
+            <button type="submit" style="background: {{ $report['passed'] ? '#059669' : '#dc2626' }};" @disabled($exam->status !== "draft")>
                 Submit for Final Compliance Check
             </button>
         </form>

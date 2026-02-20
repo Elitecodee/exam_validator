@@ -65,7 +65,7 @@ class ExamValidationService
         $grouped = [];
 
         foreach ($exam->questions as $question) {
-            $key = (string) $question->{$column};
+            $key = $this->normalizeKey((string) $question->{$column});
             $grouped[$key] = ($grouped[$key] ?? 0) + (float) $question->marks;
         }
 
@@ -82,7 +82,8 @@ class ExamValidationService
         $rules = $blueprint->rules->where('rule_type', $ruleType)->values();
 
         foreach ($rules as $rule) {
-            $actualMarks = (float) ($actualMarksByKey[$rule->rule_key] ?? 0);
+            $lookupKey = $this->normalizeKey((string) $rule->rule_key);
+            $actualMarks = (float) ($actualMarksByKey[$lookupKey] ?? 0);
             $actualPercentage = $totalMarks > 0 ? round(($actualMarks / $totalMarks) * 100, 2) : 0.0;
             $expected = (float) $rule->expected_percentage;
             $deviation = round($actualPercentage - $expected, 2);
@@ -122,5 +123,10 @@ class ExamValidationService
         }
 
         return 'No change needed.';
+    }
+
+    private function normalizeKey(string $value): string
+    {
+        return mb_strtolower(trim($value));
     }
 }

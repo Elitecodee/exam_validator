@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Lecturer;
 use App\Http\Controllers\Controller;
 use App\Models\Blueprint;
 use App\Models\Exam;
+use App\Models\ValidationHistory;
 use App\Services\ExamValidationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -78,6 +79,11 @@ class ExamController extends Controller
     {
         $this->authorizeExam($request, $exam);
 
+        if ($exam->status !== 'draft') {
+            return redirect()->route('lecturer.exams.show', $exam)
+                ->withErrors(['submit' => 'Submitted exams are locked and cannot be edited.']);
+        }
+
         $validated = $request->validate([
             'question_text' => ['required', 'string'],
             'question_type' => ['required', 'in:theory,problem_solving'],
@@ -96,7 +102,18 @@ class ExamController extends Controller
     {
         $this->authorizeExam($request, $exam);
 
+        if ($exam->status !== 'draft') {
+            return redirect()->route('lecturer.exams.show', $exam)
+                ->withErrors(['submit' => 'Only draft exams can be submitted.']);
+        }
+
+        if ($exam->questions()->count() === 0) {
+            return redirect()->route('lecturer.exams.show', $exam)
+                ->withErrors(['submit' => 'Add at least one question before submitting.']);
+        }
+
         $report = $this->validationService->buildReport($exam);
+        $this->recordValidationHistory($request, $exam, $report);
 
         if (!$report['passed']) {
             return redirect()->route('lecturer.exams.show', $exam)
@@ -119,5 +136,15 @@ class ExamController extends Controller
         if ($exam->lecturer_id !== optional($request->user())->id) {
             abort(403, 'You are not authorized to access this exam.');
         }
+    }
+
+    private function recordValidationHistory(Request $request, Exam $exam, array $report): void
+    {
+        ValidationHistory::create([
+            'exam_id' => $exam->id,
+            'validated_by' => optional($request->user())->id,
+            'result' => $report['passed'] ? 'pass' : 'fail',
+            'summary' => $report,
+        ]);
     }
 }

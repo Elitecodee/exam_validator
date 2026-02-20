@@ -5,7 +5,8 @@
 - Create new exam draft
 - Select course (placeholder ID for now)
 - Select active blueprint
-- Add questions to an exam
+- Add questions to an exam draft
+- Submit draft for final compliance check
 
 Each question stores:
 - question text
@@ -28,11 +29,15 @@ Then compares each computed percentage against blueprint rules (`expected`, `min
 - deviation percentage
 - status (`Within allowed range`, `Exceeded by ...`, `Below by ...`)
 
+### Matching behavior fix
+Rule-key matching is normalized (trim + lowercase) before comparison so values like `Easy` and `easy` are treated as the same category.
+
 ## Final compliance check
 
 Submit action runs full validation and:
 - checks total exam marks match blueprint total marks
 - checks each rule is within allowed range
+- records validation history snapshot for auditing
 
 If violations exist:
 - exam remains `draft`
@@ -44,14 +49,22 @@ If no violations:
 - `submitted_at` is set
 - report returns `PASS`
 
+## Guardrails added
+
+- Submitted exams are locked from further question edits.
+- Only `draft` exams can be submitted.
+- Empty exams (no questions) cannot be submitted.
+
 ## Key files
 
 - `app/Http/Controllers/Lecturer/ExamController.php`
 - `app/Services/ExamValidationService.php`
 - `app/Models/Exam.php`
 - `app/Models/Question.php`
+- `app/Models/ValidationHistory.php`
 - `resources/views/lecturer/exams/create.blade.php`
 - `resources/views/lecturer/exams/index.blade.php`
 - `resources/views/lecturer/exams/show.blade.php`
 - `database/migrations/2026_01_01_000004_create_exams_table.php`
 - `database/migrations/2026_01_01_000005_create_questions_table.php`
+- `database/migrations/2026_01_01_000006_create_validation_histories_table.php`

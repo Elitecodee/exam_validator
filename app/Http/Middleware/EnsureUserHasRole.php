@@ -12,10 +12,19 @@ class EnsureUserHasRole
     {
         $user = $request->user();
 
-        if (!$user || !$user->hasRole($role)) {
+        if (!$user || !$this->userHasRole($user, $role)) {
             abort(403, 'You are not authorized to access this page.');
         }
 
         return $next($request);
+    }
+
+    private function userHasRole(object $user, string $role): bool
+    {
+        if (method_exists($user, 'hasRole')) {
+            return (bool) $user->hasRole($role);
+        }
+
+        return isset($user->role) && $user->role === $role;
     }
 }

@@ -32,9 +32,9 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        $redirectRoute = Auth::user()->hasRole('admin')
-            ? 'admin.dashboard'
-            : 'lecturer.dashboard';
+        $user = Auth::user();
+        $role = $this->resolveRole($user);
+        $redirectRoute = $role === 'admin' ? 'admin.dashboard' : 'lecturer.dashboard';
 
         return redirect()->route($redirectRoute);
     }
@@ -56,9 +56,12 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role' => 'lecturer',
         ]);
 
-        $user->assignRole('lecturer');
+        if (method_exists($user, 'assignRole')) {
+            $user->assignRole('lecturer');
+        }
 
         Auth::login($user);
 
@@ -73,5 +76,14 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login.form');
+    }
+
+    private function resolveRole(object $user): string
+    {
+        if (method_exists($user, 'hasRole')) {
+            return $user->hasRole('admin') ? 'admin' : 'lecturer';
+        }
+
+        return $user->role ?? 'lecturer';
     }
 }

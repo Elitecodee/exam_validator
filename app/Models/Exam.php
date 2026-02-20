@@ -34,4 +34,9 @@ class Exam extends Model
     {
         return $this->hasMany(Question::class);
     }
+
+    public function validationHistories(): HasMany
+    {
+        return $this->hasMany(ValidationHistory::class);
+    }
 }
