@@ -59,7 +59,9 @@ class AuthController extends Controller
             'role' => 'lecturer',
         ]);
 
-        if (method_exists($user, 'assignRole')) {
+        $this->ensureSpatieRoleExists('lecturer');
+
+        if (method_exists($user, 'assignRole') && !$user->hasRole('lecturer')) {
             $user->assignRole('lecturer');
         }
 
@@ -76,6 +78,13 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login.form');
+    }
+
+    private function ensureSpatieRoleExists(string $role): void
+    {
+        if (class_exists('Spatie\Permission\Models\Role')) {
+            \Spatie\Permission\Models\Role::findOrCreate($role, 'web');
+        }
     }
 
     private function resolveRole(object $user): string
