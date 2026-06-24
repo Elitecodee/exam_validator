@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminReportingController;
 use App\Http\Controllers\Admin\AdminExamReviewController;
 use App\Http\Controllers\Admin\BlueprintController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Controllers\Lecturer\ExamController;
 use App\Http\Controllers\Lecturer\LecturerDashboardController;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +27,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', EnsureUserHasRole::class . ':admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics.index');
     Route::get('/reports/compliance.csv', [AdminAnalyticsController::class, 'downloadComplianceCsv'])->name('reports.compliance.csv');
@@ -49,7 +50,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/blueprints/{blueprint}', [BlueprintController::class, 'destroy'])->name('blueprints.destroy');
 });
 
-Route::middleware(['auth', 'role:lecturer'])->prefix('lecturer')->name('lecturer.')->group(function () {
+Route::middleware(['auth', EnsureUserHasRole::class . ':lecturer'])->prefix('lecturer')->name('lecturer.')->group(function () {
     Route::get('/dashboard', [LecturerDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/exams', [ExamController::class, 'index'])->name('exams.index');
