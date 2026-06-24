@@ -10,7 +10,7 @@ class RoleAndAdminSeeder extends Seeder
 {
     public function run(): void
     {
-        User::firstOrCreate(
+        $admin = User::firstOrCreate(
             ['email' => 'admin@exam-validator.local'],
             [
                 'name' => 'Department Officer',
@@ -18,5 +18,17 @@ class RoleAndAdminSeeder extends Seeder
                 'role' => 'admin',
             ]
         );
+
+        if ($admin->role !== 'admin') {
+            $admin->forceFill(['role' => 'admin'])->save();
+        }
+
+        if (class_exists('Spatie\Permission\Models\Role')) {
+            \Spatie\Permission\Models\Role::findOrCreate('admin');
+        }
+
+        if (method_exists($admin, 'assignRole') && !$admin->hasRole('admin')) {
+            $admin->assignRole('admin');
+        }
     }
 }

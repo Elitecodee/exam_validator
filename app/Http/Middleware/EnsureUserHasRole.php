@@ -21,10 +21,14 @@ class EnsureUserHasRole
 
     private function userHasRole(object $user, string $role): bool
     {
-        if (method_exists($user, 'hasRole')) {
-            return (bool) $user->hasRole($role);
+        if (($user->role ?? null) === $role) {
+            return true;
         }
 
-        return isset($user->role) && $user->role === $role;
+        if (method_exists($user, 'hasRole') && $user->hasRole($role)) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -80,8 +80,12 @@ class AuthController extends Controller
 
     private function resolveRole(object $user): string
     {
-        if (method_exists($user, 'hasRole')) {
-            return $user->hasRole('admin') ? 'admin' : 'lecturer';
+        if (($user->role ?? null) === 'admin') {
+            return 'admin';
+        }
+
+        if (method_exists($user, 'hasRole') && $user->hasRole('admin')) {
+            return 'admin';
         }
 
         return $user->role ?? 'lecturer';
