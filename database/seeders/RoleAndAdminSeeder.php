@@ -24,7 +24,8 @@ class RoleAndAdminSeeder extends Seeder
         }
 
         if (class_exists('Spatie\Permission\Models\Role')) {
-            \Spatie\Permission\Models\Role::findOrCreate('admin');
+            \Spatie\Permission\Models\Role::findOrCreate('admin', 'web');
+            \Spatie\Permission\Models\Role::findOrCreate('lecturer', 'web');
         }
 
         if (method_exists($admin, 'assignRole') && !$admin->hasRole('admin')) {
