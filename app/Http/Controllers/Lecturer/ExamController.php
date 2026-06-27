@@ -9,6 +9,7 @@ use App\Models\ValidationHistory;
 use App\Services\ExamValidationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ExamController extends Controller
@@ -34,11 +35,13 @@ class ExamController extends Controller
     {
         $blueprints = Blueprint::query()
             ->where('is_active', true)
+            ->with('rules')
             ->orderBy('name')
             ->get();
 
         return view('lecturer.exams.create', [
             'blueprints' => $blueprints,
+            'totalBlueprints' => Blueprint::query()->count(),
         ]);
     }
 
@@ -47,7 +50,13 @@ class ExamController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'course_id' => ['nullable', 'integer'],
-            'blueprint_id' => ['required', 'integer', 'exists:blueprints,id'],
+            'blueprint_id' => [
+                'required',
+                'integer',
+                Rule::exists('blueprints', 'id')->where('is_active', true),
+            ],
+        ], [
+            'blueprint_id.exists' => 'Select an active blueprint. Inactive blueprints cannot be used for new exam drafts.',
         ]);
 
         $exam = Exam::create([
