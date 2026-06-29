@@ -12,13 +12,30 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function showLogin(): View
+    public function home(Request $request): RedirectResponse
     {
+        if ($request->user()) {
+            return $this->redirectAuthenticatedUser($request->user());
+        }
+
+        return redirect()->route('login.form');
+    }
+
+    public function showLogin(Request $request): View|RedirectResponse
+    {
+        if ($request->user()) {
+            return $this->redirectAuthenticatedUser($request->user());
+        }
+
         return view('auth.login');
     }
 
     public function login(Request $request): RedirectResponse
     {
+        if ($request->user()) {
+            return $this->redirectAuthenticatedUser($request->user());
+        }
+
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
@@ -32,20 +49,24 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        $user = Auth::user();
-        $role = $this->resolveRole($user);
-        $redirectRoute = $role === 'admin' ? 'admin.dashboard' : 'lecturer.dashboard';
-
-        return redirect()->route($redirectRoute);
+        return $this->redirectAuthenticatedUser(Auth::user());
     }
 
-    public function showRegister(): View
+    public function showRegister(Request $request): View|RedirectResponse
     {
+        if ($request->user()) {
+            return $this->redirectAuthenticatedUser($request->user());
+        }
+
         return view('auth.register');
     }
 
     public function register(Request $request): RedirectResponse
     {
+        if ($request->user()) {
+            return $this->redirectAuthenticatedUser($request->user());
+        }
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
@@ -78,6 +99,16 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login.form');
+    }
+
+    private function redirectAuthenticatedUser(object $user): RedirectResponse
+    {
+        return redirect()->route($this->dashboardRouteFor($user));
+    }
+
+    private function dashboardRouteFor(object $user): string
+    {
+        return $this->resolveRole($user) === 'admin' ? 'admin.dashboard' : 'lecturer.dashboard';
     }
 
     private function ensureSpatieRoleExists(string $role): void
